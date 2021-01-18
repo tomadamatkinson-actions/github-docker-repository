@@ -1,6 +1,13 @@
 name: "Update Docker Image"
 
-on: [workflow_dispatch]
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Specify tag to use with image"
+        required: true
+        default: "latest"
+      
 
 jobs:
   build:
@@ -16,10 +23,8 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - run: ls
-
       - name: Build Image
-        run: docker build -t ${{ github.repository }}:latest Dockerfile
+        run: docker build -t ghcr.io/${{ github.repository }}:${{ github.event.inputs.tag }} .
 
-      - name: Images
-        run: docker images
+      - name: Push Image
+        run: docker image push ghcr.io/${{ github.repository }}:${{ github.event.inputs.tag }}
