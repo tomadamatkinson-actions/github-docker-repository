@@ -9,12 +9,17 @@ jobs:
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1
         with:
-          registry: ghcr.io
+          registry: ghcr.io/tomadamatkinson-actions/github-docker-repository
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.PAT }}
+
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - run: ls
 
       - name: Build Image
-        run: docker build -t ${{ github.repository }} .
+        run: docker build -t ${{ github.repository }}:latest Dockerfile
 
       - name: Images
         run: docker images
