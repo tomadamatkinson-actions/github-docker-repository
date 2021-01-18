@@ -1,0 +1,19 @@
+
+on: [workflow_run]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Image
+        run: docker build -t ${{ github.repository }} .
+
+      - name: Images
+        run: docker images
